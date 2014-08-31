@@ -7,7 +7,7 @@ app.post('/', function(req, res) {
   var secretHeader = req.headers['x-hub-signature']
   var body = JSON.stringify(req.body)
   if(secretCheck(body, secretHeader) === true) {
-    childProcess.exec('git pull', {cwd: './../apple-landing/'} function(err, stdout, stderr) {
+    childProcess.exec('git pull', {cwd: './../apple-landing/'}, function(err, stdout, stderr) {
       console.log(stdout)
       res.send(stdout)
     })
@@ -23,3 +23,5 @@ function secretCheck(body, hash) {
   hmac.end()
   return ("sha1=" + hmac.read().toString('hex')) === hash 
 }
+
+app.listen(process.env.WEBHOOKS_PORT || 5000);
