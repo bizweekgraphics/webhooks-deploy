@@ -3,6 +3,7 @@
   "description": "Simple server to setup continuous integration",
   "version": "0.0.1",
   "dependencies": {
+    "body-parser": "^1.6.7",
     "express": "4.8.7"
   }
 }
