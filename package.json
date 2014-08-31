@@ -1,0 +1,8 @@
+{
+  "name": "webhooks-deployment",
+  "description": "Simple server to setup continuous integration",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "4.8.7"
+  }
+}
