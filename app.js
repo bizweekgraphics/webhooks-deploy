@@ -7,7 +7,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 
 app.post('/', function(req, res) {
-  console.log(req)
   var secretHeader = req.headers['x-hub-signature']
   var body = JSON.stringify(req.body)
   if(secretCheck(body, secretHeader) === true) {
