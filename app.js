@@ -13,6 +13,7 @@ app.post('/', function(req, res) {
     childProcess.exec('git pull', {cwd: './../apple-landing/'}, function(err, stdout, stderr) {
       console.log(stdout)
       res.send(stdout)
+      childProcess.exec('forever restartall', function(err, stdout, stderr) {})
     })
   } else {
     res.send("Invalid request")
