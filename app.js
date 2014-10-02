@@ -5,7 +5,21 @@ var express = require('express'),
     bodyParser = require('body-parser');
 
 var argv = parseArgs(process.argv);
-var appDirectory = argv.d
+var appDirectory = argv.d;
+var command = argv.c || 'git pull';
+var secretKey = argv.s || process.env.WEBHOOKS_SECRET;
+var serverPort = argv.p || process.env.WEBHOOKS_PORT || 5000;
+
+if(!appDirectory) {
+  console.error("You must specify a directory");
+  process.exit();
+}
+
+if(!secretKey) {
+  console.error("You must specify a github secret key");
+  process.exit();
+}
+
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
@@ -25,17 +39,15 @@ app.post('/', function(req, res) {
 
 function secretCheck(body, hash) {
   var crypto = require('crypto');
-  var hmac = crypto.createHmac('sha1', process.env.WEBHOOKS_SECRET)
+  var hmac = crypto.createHmac('sha1', secretKey)
   hmac.write(body)
   hmac.end()
   return ("sha1=" + hmac.read().toString('hex')) === hash 
 }
 
-var port = process.env.WEBHOOKS_PORT || 5000;
+app.listen(serverPort);
 
-app.listen(port);
-
-console.log("Server running on port " + port)
+console.log("Server running on port " + serverPort)
 
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
