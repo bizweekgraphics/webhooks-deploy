@@ -1,7 +1,11 @@
 var express = require('express'),
     app = express(),
     childProcess = require('child_process'),
+    parseArgs = require('minimist'),
     bodyParser = require('body-parser');
+
+var argv = parseArgs(process.argv);
+var appDirectory = argv.d
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
@@ -10,10 +14,9 @@ app.post('/', function(req, res) {
   var secretHeader = req.headers['x-hub-signature']
   var body = JSON.stringify(req.body)
   if(secretCheck(body, secretHeader) === true) {
-    childProcess.exec('git pull', {cwd: './../apple-landing/'}, function(err, stdout, stderr) {
+    childProcess.exec('git pull', {cwd: appDirectory}, function(err, stdout, stderr) {
       console.log(stdout)
       res.send(stdout)
-      childProcess.exec('forever restartall', function(err, stdout, stderr) {})
     })
   } else {
     res.send("Invalid request")
